@@ -5,9 +5,10 @@ import sys
 from argparse import ArgumentParser
 
 import torch
-import utils as ut
 import whisperx
 from whisperx.utils import get_writer
+
+from . import utils as ut
 
 logger = logging.getLogger("whisperx_transcribe")
 

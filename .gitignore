@@ -1,10 +1,18 @@
 # Miscellaneous 
 **/*.mp3
+**/*.mkv 
+**/*.mp4
+**/*.wav
+**/*.flac
+**/*.webm
+**/*.ogg
+**/*.mov
 
 model/*
 !model/.gitkeep
 **/*diarized.json
 **/*segments.txt
+**/*.srt 
 **/*.log 
 
 .env 
