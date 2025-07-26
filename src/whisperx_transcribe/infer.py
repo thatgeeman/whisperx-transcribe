@@ -38,12 +38,26 @@ parser.add_argument(
     choices=["float16", "float32", "int8"],
     help="Compute type for the model (default: int8, change to float16 if low on GPU memory)",
 )
+parser.add_argument(
+    "--max_speakers",
+    type=int,
+    default=None,
+    help="Maximum number of speakers to detect in the audio (default: None, no limit)",
+)
+parser.add_argument(
+    "--min_speakers",
+    type=int,
+    default=1,
+    help="Minimum number of speakers to detect in the audio (default: 1)",
+)
 
 args = parser.parse_args()
 audio_file = args.audio_file
 device = args.device
 batch_size = args.batch_size
 compute_type = args.compute_type
+max_speakers = args.max_speakers
+min_speakers = args.min_speakers
 
 start_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 audio_path = audio_file.split(".")[0]
@@ -77,51 +91,57 @@ logger.info("Transcription complete")
 
 ut.cleanup(model)
 
-# 2. Align whisper output
-model_a, metadata = whisperx.load_align_model(
+# Align whisper output → second model for CTC alignment
+model_alignment, metadata = whisperx.load_align_model(
     language_code=result["language"], device=device
 )
-result = whisperx.align(
-    result["segments"], model_a, metadata, audio, device, return_char_alignments=False
+result_aligned = whisperx.align(
+    result["segments"],
+    model_alignment,
+    metadata,
+    audio,
+    device,
+    return_char_alignments=False,
 )
 
 logger.info("Transcription alignment complete")  # after alignment
 
 # delete model if low on GPU resources
-ut.cleanup(model_a)
+ut.cleanup(model_alignment)
 
-# 3. Assign speaker labels
+writer = get_writer("srt", output_dir=audio_parent)
+"""
+# Options from the cli
+max_line_width: (not possible with --no_align) the maximum number of characters in a line before breaking the line
+max_line_count: (not possible with --no_align) the maximum number of lines in a segment
+highlight_words: (not possible with --no_align) underline each word as it is spoken in srt and vtt
+"""
+result_aligned["language"] = result["language"]
+with open(f"{audio_path}_sub.srt", "w") as file_out:
+    writer.write_result(
+        result=result_aligned,
+        file=file_out,
+        options={
+            "max_line_width": None,
+            "max_line_count": None,
+            "highlight_words": False,
+        },
+    )
+logger.info(f"Subtitles saved to {audio_path}_sub.srt")
+
+# Diarization
 diarize_model = whisperx.diarize.DiarizationPipeline(
     use_auth_token=ut.parse_token(), device=device
 )
-
-# add min/max number of speakers if known
-diarize_segments = diarize_model(audio)
-# diarize_model(audio, min_speakers=min_speakers, max_speakers=max_speakers)
+diarize_segments = diarize_model(
+    audio, min_speakers=min_speakers, max_speakers=max_speakers
+)
 logger.info("Speaker diarization complete")
 
-result = whisperx.assign_word_speakers(diarize_segments, result)
-
-writer = get_writer("srt", output_dir=audio_parent)
-writer.write_result(
-    result=result,
-    file=f"{audio_path}_sub.srt",
-    options={
-        """
-        # Options from the cli
-        max_line_width: (not possible with --no_align) the maximum number of characters in a line before breaking the line
-        max_line_count: (not possible with --no_align) the maximum number of lines in a segment
-        "highlight_words: (not possible with --no_align) underline each word as it is spoken in srt and vtt
-        """
-        "max_line_width": None,
-        "max_line_count": None,
-        "highlight_words": False,
-    },
-)
-logger.info(f"Subtitles saved to {audio_path}_sub.srt")
-
+# we get "word_segments" and "segments" in this result, others are lost
+result_diarized = whisperx.assign_word_speakers(diarize_segments, result_aligned)
 # write json to file
 with open(f"{audio_path}_diarized.json", "w") as f:
-    json.dump(result, f, indent=4)
+    json.dump(result_diarized, f, indent=4)
 
 logger.info(f"Diarized results saved to {audio_path}_diarized.json")
