@@ -1,8 +1,16 @@
 # Notes
 
-Cluster backend does not support efficient float16 computation.
+## Usage
 
-- Quadro P4000
+For sample audio placed in `assets/sample`
+
+```
+python src/whisperx_transcribe/infer.py assets/sample/audio.mp3
+```
+
+## Info
+
+Cluster backend at work does not support float16 computation (Quadro P4000)
 
 ## Environment Setup
 
