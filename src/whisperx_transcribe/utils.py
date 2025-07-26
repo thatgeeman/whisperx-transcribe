@@ -14,7 +14,7 @@ def parse_token():
     """
     Parse the authentication token from the environment variable.
     """
-    token = os.getenv("MY_TOKEN")
+    token = os.environ.get("MY_TOKEN")
     if not token:
         raise ValueError(
             "Authentication token `MY_TOKEN` is not set in the `.env` file."

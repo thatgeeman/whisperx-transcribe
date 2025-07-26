@@ -2,8 +2,11 @@ import sys
 from argparse import ArgumentParser
 
 import torch
+from dotenv import load_dotenv
 
 from whisperx_transcribe.infer import main
+
+load_dotenv()
 
 
 def cli():
