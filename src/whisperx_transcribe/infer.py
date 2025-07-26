@@ -2,10 +2,12 @@ import datetime
 import gc
 import json
 import logging
+import sys
 
 import torch
 import utils as ut
 import whisperx
+from whisperx.utils import get_writer
 
 logger = logging.getLogger(__name__)
 
@@ -15,12 +17,18 @@ batch_size = 8  # reduce if low on GPU mem
 compute_type = "int8"  # change to "int8" if low on GPU mem (may reduce accuracy)
 start_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 audio_path = audio_file.split(".")[0]
+audio_parent = audio_path.rsplit("/", 1)[0]
 audio_stem = audio_path.split("/")[-1]
 
-format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+format = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 file_handler = logging.FileHandler(f"logs/{audio_stem}_{start_time}.log", mode="w")
-file_handler.setFormatter(logging.Formatter(format))
+file_handler.setFormatter(format)
+stream_handler = logging.StreamHandler(stream=sys.stdout)
+stream_handler.setFormatter(format)
+
 logger.addHandler(file_handler)
+logger.addHandler(stream_handler)
+
 
 logger.setLevel(logging.INFO)
 
@@ -71,16 +79,12 @@ logger.info("Speaker diarization complete")
 
 result = whisperx.assign_word_speakers(diarize_segments, result)
 
+writer = get_writer("srt", output_dir=audio_parent)
+writer.write_result(result=result, file=f"{audio_path}_sub.srt")
+logger.info(f"Subtitles saved to {audio_path}_sub.srt")
+
 # write json to file
 with open(f"{audio_path}_diarized.json", "w") as f:
     json.dump(result, f, indent=4)
 
 logger.info(f"Diarized results saved to {audio_path}_diarized.json")
-
-# 4. Write segments to file
-with open(f"{audio_path}_segments.txt", "w") as f:
-    for segment in result["segments"]:
-        f.write(f"{segment['start']:.2f} --> {segment['end']:.2f}\n")
-        f.write(f"{segment['text']}\n\n")
-
-logger.info(f"Segments saved to {audio_path}_segments.txt")

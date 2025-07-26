@@ -1,16 +1,12 @@
 # Notes
 
-Cluster backend do not support efficient float16 computation.
+Cluster backend does not support efficient float16 computation.
 
 - Quadro P4000
 
-## Alternatives
-
-Replicate provides inference. See [colab](https://colab.research.google.com/drive/1FH50NOULkMUawgvXR7H9gSc4LpDaM5H8).
-
 ## Environment Setup
 
-Python 3.10 used.
+Python 3.10.
 
 Install `ffmpeg`, `rust`, `cudnn=8.9.7` from conda.
 
@@ -27,9 +23,19 @@ libcudnn-dev-8.9.7.29
 
 See `pyproject.toml` for python dependencies.
 
-## HF
+## HuggingFace
 
 Accept terms for
 
 - https://huggingface.co/pyannote/speaker-diarization-3.1
 - https://huggingface.co/pyannote/segmentation-3.0
+
+Add huggingface token to `.env` file **without** the `hf_` prefix:
+
+```
+MY_TOKEN=xxx
+```
+
+## Alternatives
+
+Replicate provides inference. See [colab](https://colab.research.google.com/drive/1FH50NOULkMUawgvXR7H9gSc4LpDaM5H8).
