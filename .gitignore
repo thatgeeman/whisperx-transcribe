@@ -3,6 +3,9 @@
 
 model/*
 !model/.gitkeep
+**/*diarized.json
+**/*segments.txt
+**/*.log 
 
 .env 
 

@@ -10,7 +10,8 @@ requires-python = ">=3.10,<3.13"
 dependencies = [
     "whisperx (>=3.4.2,<4.0.0)",
     "setuptools-rust (>=1.11.1,<2.0.0)",
-    "python-dotenv (>=1.1.1,<2.0.0)"
+    "python-dotenv (>=1.1.1,<2.0.0)",
+    "ctranslate2 (<=4.4.0)"
 ]
 
 
