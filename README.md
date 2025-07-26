@@ -30,10 +30,10 @@ Accept terms for
 - https://huggingface.co/pyannote/speaker-diarization-3.1
 - https://huggingface.co/pyannote/segmentation-3.0
 
-Add huggingface token to `.env` file **without** the `hf_` prefix:
+Add huggingface token to `.env` file:
 
 ```
-MY_TOKEN=xxx
+MY_TOKEN=hf_xxx
 ```
 
 ## Alternatives
