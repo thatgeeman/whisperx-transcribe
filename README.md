@@ -1,12 +1,20 @@
 # Notes
 
+> In progress
+
+WhisperX Transcription for Notetaking maniacs and Planners.
+
 ## Usage
+
+After cloning the repo and setting up the env: `pip install .` to install `wxt` command.
 
 For sample audio placed in `assets/sample`
 
 ```
-python src/whisperx_transcribe/infer.py assets/sample/audio.mp3
+wxt assets/sample/audio.mp3
 ```
+
+For other supported options see `wxt --help`.
 
 ## Info
 
