@@ -26,6 +26,8 @@ Python 3.10.
 
 Install `ffmpeg`, `rust`, `cudnn=8.9.7` from conda.
 
+Setup `ollama` based on latest instructions from https://github.com/ollama/ollama/tree/main/docs
+
 Future me: `conda install cudnn=8.9.7` installed:
 
 ```

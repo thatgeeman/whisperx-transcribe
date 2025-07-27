@@ -11,11 +11,14 @@
 model/*
 !model/.gitkeep
 **/*diarized.json
+**/*grouped.json
 **/*segments.txt
 **/*.srt 
 **/*.log 
+**/_*.ipynb
 
 .env 
+.snippets
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

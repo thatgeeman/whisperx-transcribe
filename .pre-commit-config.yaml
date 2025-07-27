@@ -1,0 +1,11 @@
+
+repos:
+  - repo: local 
+    hooks:
+      - id: strip-notebook-output
+        stages:
+          - pre-commit
+        language: system
+        name: Strip notebook output
+        entry: nbstripout 
+        types: [jupyter] 

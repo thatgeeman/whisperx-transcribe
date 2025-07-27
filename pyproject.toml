@@ -12,7 +12,15 @@ dependencies = [
     "whisperx (>=3.4.2,<4.0.0)",
     "setuptools-rust (>=1.11.1,<2.0.0)",
     "python-dotenv (>=1.1.1,<2.0.0)",
-    "ctranslate2 (<=4.4.0)"
+    "ctranslate2 (<=4.4.0)",
+    "langchain (>=0.3.27,<0.4.0)",
+    "llama-index (>=0.12.52,<0.13.0)",
+    "gradio (>=5.38.2,<6.0.0)",
+    "sentence-transformers (>=5.0.0,<6.0.0)",
+    "llama-index-embeddings-huggingface (>=0.5.5,<0.6.0)",
+    "llama-index-embeddings-ollama (>=0.6.0,<0.7.0)",
+    "llama-index-llms-ollama (>=0.6.2,<0.7.0)",
+    "llama-index-readers-json (>=0.3.0,<0.4.0)"
 ]
 
 
@@ -22,3 +30,10 @@ build-backend = "poetry.core.masonry.api"
 
 [project.scripts]
 wxt = "whisperx_transcribe.cli:cli"
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.30.0"
+notebook = "^7.4.4"
+nbstripout = "^0.8.1"
+pre-commit = "^4.2.0"
+

@@ -1,32 +1,16 @@
-import datetime
 import json
-import logging
-import sys
+from datetime import datetime
 
 import whisperx
 from whisperx.utils import get_writer
 
-from . import utils as ut
-
-logger = logging.getLogger("whisperx_transcribe")
+import whisperx_transcribe.utils as ut
+from whisperx_transcribe import logger, start_time
 
 
 def main(audio_file, device, batch_size, compute_type, max_speakers, min_speakers):
-    start_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     audio_path = audio_file.split(".")[0]
     audio_parent = audio_path.rsplit("/", 1)[0]
-    audio_stem = audio_path.split("/")[-1]
-
-    format = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-    file_handler = logging.FileHandler(f"logs/{audio_stem}_{start_time}.log", mode="w")
-    file_handler.setFormatter(format)
-    stream_handler = logging.StreamHandler(stream=sys.stdout)
-    stream_handler.setFormatter(format)
-
-    logger.addHandler(file_handler)
-    logger.addHandler(stream_handler)
-
-    logger.setLevel(logging.INFO)
 
     logger.info(
         f"Transcribing {audio_file} with batch size {batch_size} and compute type {compute_type}"
@@ -63,11 +47,10 @@ def main(audio_file, device, batch_size, compute_type, max_speakers, min_speaker
     ut.cleanup(model_alignment)
 
     writer = get_writer("srt", output_dir=audio_parent)
-    """
-    # Options from the cli
-    max_line_width: (not possible with --no_align) the maximum number of characters in a line before breaking the line
-    max_line_count: (not possible with --no_align) the maximum number of lines in a segment
-    highlight_words: (not possible with --no_align) underline each word as it is spoken in srt and vtt
+    """ 
+    max_line_width: the maximum number of characters in a line before breaking the line
+    max_line_count: the maximum number of lines in a segment
+    highlight_words: underline each word as it is spoken in srt and vtt
     """
     result_aligned["language"] = result["language"]
     with open(f"{audio_path}_sub.srt", "w") as file_out:
@@ -100,5 +83,5 @@ def main(audio_file, device, batch_size, compute_type, max_speakers, min_speaker
     ut.cleanup(diarize_model)
     logger.info(f"Diarized results saved to {audio_path}_diarized.json")
     logger.info("Transcription and diarization complete")
-    logger.info(f"Total time taken: {datetime.datetime.now() - start_time}")
+    logger.info(f"Total time taken: {datetime.now() - start_time}")
     return 0

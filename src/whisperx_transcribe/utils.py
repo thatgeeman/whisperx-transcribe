@@ -1,6 +1,8 @@
 import gc
+import json
 import logging
 import os
+from typing import Dict, Generator, List
 
 import torch
 from dotenv import load_dotenv
@@ -24,6 +26,66 @@ def parse_token():
             "Authentication token should start with 'hf_'. Please check your `.env` file."
         )
     return token
+
+
+def load_segments(segments_file):
+    """
+    Load segments from a JSON file.
+    """
+    try:
+        with open(segments_file, "r") as file:
+            segments = json.load(file)["segments"]
+    except Exception as e:
+        logging.info(f"Error loading segments from {segments_file}: {e}")
+    return segments
+
+
+def labeled_segment(segment, speaker_names: dict = {}) -> Dict[str, str]:
+    """
+    Convert a segment to a labeled dictionary with start, end, speaker, and phrase.
+    """
+    if len(segment["words"]) <= 2:
+        return {
+            "start": segment["start"],
+            "end": segment["end"],
+            "speaker": "",
+            "phrase": "",
+        }
+
+    start_timestamp = segment["start"]
+    end_timestamp = segment["end"]
+    speaker = segment["speaker"]
+    alt_speaker_name = speaker_names.get(speaker, speaker)
+    phrase = segment["text"]
+
+    return {
+        "start": start_timestamp,
+        "end": end_timestamp,
+        "speaker": alt_speaker_name,
+        "phrase": phrase.strip(),
+    }
+
+
+def get_segment_iterator(
+    segments, speaker_names: dict = {}
+) -> Generator[Dict[str, str], None, None]:
+    return (labeled_segment(segment, speaker_names) for segment in segments)
+
+
+def group_speakers(segments, speaker_names: dict = {}) -> List[Dict[str, str]]:
+    speaker_phrases = []
+    prev_p = {"speaker": "", "phrase": ""}
+    for p in get_segment_iterator(segments, speaker_names):
+        if not p["phrase"]:
+            continue  # skip segments with too few words
+        if p["speaker"] == prev_p["speaker"]:
+            # join phrases of the same speaker and update end time
+            prev_p["phrase"] += " " + p["phrase"]
+            prev_p["end"] = p["end"]
+        else:
+            speaker_phrases.append(p)
+            prev_p = p
+    return speaker_phrases
 
 
 def cleanup(obj):
