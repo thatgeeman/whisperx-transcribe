@@ -27,10 +27,10 @@ Strictly follow the tabular structure below for your final answer. You may add m
 ```markdown
 ## Action Items
 
-| #   | Action item | Responsible party | Due Date |
-| --- | ----------- | ----------------- | -------- |
-|     |             |                   |          |
-|     |             |                   |          |
-|     |             |                   |          |
-|     |             |                   |          |
+| #   | Action item | Assigned by | Assigned to | Due Date |
+| --- | ----------- | ----------- | ----------- | -------- |
+|     |             |             |             |          |
+|     |             |             |             |          |
+|     |             |             |             |          |
+|     |             |             |             |          |
 ```
