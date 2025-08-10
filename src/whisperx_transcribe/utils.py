@@ -43,31 +43,31 @@ def load_segments(segments_file):
 
 def labeled_segment(segment, speaker_names: dict = {}) -> Dict[str, str]:
     """
-    Convert a segment to a labeled dictionary with start, end, speaker, and phrase.
+    Convert a segment to a labeled dictionary with start, end, speaker, and text.
     """
     if len(segment["words"]) <= 2:
         return {
             "start": segment["start"],
             "end": segment["end"],
             "speaker": "",
-            "phrase": "",
+            "text": "",
         }
     if "speaker" not in segment:
         segment["speaker"] = ""
-    if "phrase" not in segment:
-        segment["phrase"] = ""
+    if "text" not in segment:
+        segment["text"] = ""
 
     start_timestamp = segment["start"]
     end_timestamp = segment["end"]
     speaker = segment["speaker"]
     alt_speaker_name = speaker_names.get(speaker, speaker)
-    phrase = segment["text"]
+    text = segment["text"]
 
     return {
         "start": start_timestamp,
         "end": end_timestamp,
         "speaker": alt_speaker_name,
-        "phrase": phrase.strip(),
+        "text": text.strip(),
     }
 
 
@@ -79,30 +79,39 @@ def get_segment_iterator(
 
 def group_speakers(segments, speaker_names: dict = {}) -> List[Dict[str, str]]:
     """Merges consequent dialogues by the same speaker"""
-    speaker_phrases = []
-    prev_p = {"speaker": "", "phrase": ""}
+    speaker_texts = []
+    prev_p = {"speaker": "", "text": ""}
     for p in get_segment_iterator(segments, speaker_names):
         if p["speaker"] == prev_p["speaker"]:
-            # join phrases of the same speaker and update end time
-            prev_p["phrase"] += " " + p["phrase"]
+            # join texts of the same speaker and update end time
+            prev_p["text"] += " " + p["text"]
             prev_p["end"] = p["end"]
         else:
-            speaker_phrases.append(p)
+            speaker_texts.append(p)
             prev_p = p
-    return speaker_phrases
+    return speaker_texts
 
 
-def speaker_segment(segment_phrase: Dict[str, str]) -> Document:
+def speaker_segment(segment_text: Dict[str, str], turn_id: int = 0) -> Document:
     """
-    Format a segment phrase for prompting.
+    Format a segment text for prompting and prepare a LlamaIndex Document object.
+    Also adds the metadata field to specify the person to whom the transcript belongs.
+
     """
-    start_time = segment_phrase["start"]
-    end_time = segment_phrase["end"]
-    speaker = segment_phrase["speaker"]
-    phrase = segment_phrase["phrase"]
-    human_ts = f"{start_time}:{end_time}"
-    body = f"[{human_ts}] **{speaker}**: {phrase}"
-    return Document(text=body, metadata={"speaker": speaker, "timestamp_s": start_time})
+    start_time = segment_text["start"]
+    end_time = segment_text["end"]
+    speaker = segment_text["speaker"]
+    text = segment_text["text"]
+    human_ts = f"{start_time}s:{end_time}s"
+    body = f"[{human_ts}] **{speaker}**: {text}"
+    return Document(
+        text=body,
+        metadata={
+            "speaker": speaker,
+            "timestamp_s": start_time,
+            "turn_id": turn_id,
+        },
+    )
 
 
 def get_all_speakers(segments: List[Dict[str, str]]) -> List[str]:

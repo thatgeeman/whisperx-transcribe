@@ -1,3 +1,8 @@
+"""
+Meant to work with context stuffed prompting as per instructions
+here prompts/instructions_01.md to create action items.
+"""
+
 import json
 import os
 from datetime import datetime
@@ -40,10 +45,13 @@ if __name__ == "__main__":
     model = "gemma3:4b"  # gemma3:1b
     logger.info(f"Using audio segments file: {SEG_FILE} to merge consequent dialogues.")
     segments = ut.load_segments(segments_file=SEG_FILE)
+
     grouped_segments = ut.group_speakers(segments=segments, speaker_names={})
     with open(GROUP_SEG_FILE, "w") as f:
         json.dump(grouped_segments, f, indent=4)
-    logger.info(f"Prepared merged dialogues files: {GROUP_SEG_FILE}")
+    logger.info(
+        f"Prepared merged dialogues files: {GROUP_SEG_FILE} with {len(grouped_segments)} segments"
+    )
     logger.info(f"Loading prompts: {PROMPT_FILE} and model: {model}")
     with open(PROMPT_FILE, "r") as f:
         instructions = f.read()
@@ -53,6 +61,7 @@ if __name__ == "__main__":
     response = simple_prompter(
         instructions,
         grouped_segments,
+        # ! make a config file
         log_params={
             "truncate_prompt_at": truncate_prompt_at,
         },

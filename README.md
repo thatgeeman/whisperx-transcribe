@@ -1,6 +1,6 @@
 # Notes
 
-> In progress
+> This is still a WIP as of 10.08.2025 
 
 WhisperX Transcription for Notetaking maniacs and Planners.
 
@@ -15,6 +15,16 @@ wxt assets/sample/audio.mp3
 ```
 
 For other supported options see `wxt --help`.
+
+
+### Models 
+
+- Summarization model: Any available on Ollama (developed with `gemma3:4b`)
+- Transcription model: WhisperX Large v3
+- Diarization model: 
+  
+In retrieval mode, based on [MTEB ranking](https://huggingface.co/spaces/mteb/leaderboard): 
+- Text embedding model: Qwen3-Embedding-0.6B
 
 ## Info
 
