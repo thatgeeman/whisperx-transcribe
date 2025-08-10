@@ -41,13 +41,13 @@ You will receive a transcript in the following JSON format:
     "start": <time in seconds>,
     "end": <time in seconds>,
     "speaker": "<speaker-name>",
-    "phrase": "<text block>"
+    "text": "<text block>"
   },
   ...
 ]
 ```
 
-Each item in the JSON transcript above represents a segment of the transcript with a start time, end time, speaker name, and the spoken phrase. Several such segments aee provided.
+Each item in the JSON transcript above represents a segment of the transcript with a start time, end time, speaker name, and the spoken text. Several such segments aee provided.
 
 **Actual Transcript**
 
