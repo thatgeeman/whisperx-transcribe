@@ -12,7 +12,7 @@ from whisperx_transcribe import logger, start_time
 max_workers = os.cpu_count()
 
 
-def prompter(instructions, segments, log_params: dict = {}):
+def simple_prompter(instructions, segments, log_params: dict = {}):
     prompt_template = PromptTemplate(
         template=instructions,
         template_format="jinja2",
@@ -50,7 +50,7 @@ if __name__ == "__main__":
     llm = Ollama(model=model, request_timeout=1000)
     Settings.llm = llm
     logger.info(f"Initialized with model: {model}")
-    response = prompter(
+    response = simple_prompter(
         instructions,
         grouped_segments,
         log_params={

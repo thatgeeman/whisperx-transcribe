@@ -2,6 +2,7 @@ import logging
 import sys
 from datetime import datetime
 from importlib.metadata import PackageNotFoundError, version
+from pathlib import Path
 
 start_time = datetime.now()
 
@@ -26,6 +27,7 @@ def get_logger():
 
     # File handler
     start_time_s = start_time.strftime("%Y-%m-%d_%H-%M-%S")
+    Path("logs").mkdir(parents=True, exist_ok=True)
     file_handler = logging.FileHandler(
         f"logs/WXTv{version}_{start_time_s}.log", mode="w"
     )

@@ -6,6 +6,7 @@ from typing import Dict, Generator, List
 
 import torch
 from dotenv import load_dotenv
+from llama_index.core import Document
 
 load_dotenv()
 
@@ -51,6 +52,10 @@ def labeled_segment(segment, speaker_names: dict = {}) -> Dict[str, str]:
             "speaker": "",
             "phrase": "",
         }
+    if "speaker" not in segment:
+        segment["speaker"] = ""
+    if "phrase" not in segment:
+        segment["phrase"] = ""
 
     start_timestamp = segment["start"]
     end_timestamp = segment["end"]
@@ -77,8 +82,6 @@ def group_speakers(segments, speaker_names: dict = {}) -> List[Dict[str, str]]:
     speaker_phrases = []
     prev_p = {"speaker": "", "phrase": ""}
     for p in get_segment_iterator(segments, speaker_names):
-        if not p["phrase"]:
-            continue  # skip segments with too few words
         if p["speaker"] == prev_p["speaker"]:
             # join phrases of the same speaker and update end time
             prev_p["phrase"] += " " + p["phrase"]
@@ -87,6 +90,30 @@ def group_speakers(segments, speaker_names: dict = {}) -> List[Dict[str, str]]:
             speaker_phrases.append(p)
             prev_p = p
     return speaker_phrases
+
+
+def speaker_segment(segment_phrase: Dict[str, str]) -> Document:
+    """
+    Format a segment phrase for prompting.
+    """
+    start_time = segment_phrase["start"]
+    end_time = segment_phrase["end"]
+    speaker = segment_phrase["speaker"]
+    phrase = segment_phrase["phrase"]
+    human_ts = f"{start_time}:{end_time}"
+    body = f"[{human_ts}] **{speaker}**: {phrase}"
+    return Document(text=body, metadata={"speaker": speaker, "timestamp_s": start_time})
+
+
+def get_all_speakers(segments: List[Dict[str, str]]) -> List[str]:
+    """
+    Extract all unique speakers from the segments.
+    """
+    speakers = set()
+    for segment in segments:
+        if "speaker" in segment and segment["speaker"]:
+            speakers.add(segment["speaker"])
+    return list(speakers)
 
 
 def cleanup(obj):
