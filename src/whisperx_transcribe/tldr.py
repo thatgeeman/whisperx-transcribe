@@ -12,7 +12,7 @@ from whisperx_transcribe import logger, start_time
 max_workers = os.cpu_count()
 
 
-def prompter():
+def simple_prompter():
     prompt_template = PromptTemplate(
         template=instructions,
         template_format="jinja2",
