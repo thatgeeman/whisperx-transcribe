@@ -19,7 +19,7 @@ def main(audio_file, device, batch_size, compute_type, max_speakers, min_speaker
     # save model to local path (optional)
     model_dir = "model/"
     model = whisperx.load_model(
-        "large-v2", device, compute_type=compute_type, download_root=model_dir
+        "large-v3", device, compute_type=compute_type, download_root=model_dir
     )
 
     audio = whisperx.load_audio(audio_file)
@@ -66,6 +66,7 @@ def main(audio_file, device, batch_size, compute_type, max_speakers, min_speaker
     logger.info(f"Subtitles saved to {audio_path}_sub.srt")
 
     # Diarization
+    logger.info("Diarization starting...")
     diarize_model = whisperx.diarize.DiarizationPipeline(
         use_auth_token=ut.parse_token(), device=device
     )

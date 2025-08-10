@@ -73,6 +73,7 @@ def get_segment_iterator(
 
 
 def group_speakers(segments, speaker_names: dict = {}) -> List[Dict[str, str]]:
+    """Merges consequent dialogues by the same speaker"""
     speaker_phrases = []
     prev_p = {"speaker": "", "phrase": ""}
     for p in get_segment_iterator(segments, speaker_names):
