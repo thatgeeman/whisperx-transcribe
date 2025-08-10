@@ -30,12 +30,18 @@ Strictly follow the structure below for your final answer. You may add more topi
 1.  **Topic:** Review of Q2 2025 Performance Metrics.
     * **Introduced by:** `Speaker A`.
     * **Summary:** The team reviewed the sales figures and user engagement data from the previous quarter, noting a positive trend.
+    - **Details:** 
+      - [Additional bullet points that descibe the topic in detail ...]
 
 2.  **Topic:** Planning for the "Phoenix" Project Launch.
     * **Introduced by:** `Speaker B`.
     * **Summary:** The discussion focused on finalizing the marketing strategy and setting a firm deadline for the launch.
+    - **Details:** 
+      - [Additional bullet points that descibe the topic in detail ...]
 
 3.  **Topic:** Brainstorming for the Annual Offsite Event.
     * **Introduced by:** `Speaker A`.
     * **Summary:** Participants shared initial ideas for potential locations and activities for the company's annual team-building event.
+    - **Details:** 
+      - [Additional bullet points that descibe the topic in detail ...]
 ```

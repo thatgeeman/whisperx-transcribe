@@ -31,9 +31,13 @@ Strictly follow the structure below for your final answer. You may add more topi
     - **Participants:** `Speaker A`, `Speaker B`.
     - **Status:** Resolved/Unresolved.
     - **Summary:** [A one-sentence summary of the outcome or final state of the discussion. e.g., "Speaker A conceded the point after reviewing the data," or "They agreed to table the discussion for the next meeting."]
+    - **Details:** 
+      - [Additional bullet points that descibe the issue in detail ...]
 
 - **Topic/Issue:** [Brief, neutral description of the unresolved item or open question].
     - **Participants:** `Speaker C`, `Speaker D`.
     - **Status:** Unresolved.
     - **Summary:** [A one-sentence summary of why it remains unresolved. e.g., "The question was raised but the conversation moved on before it could be answered."]
+    - **Details:** 
+      - [Additional bullet points that descibe the issue in detail ...]
 ```

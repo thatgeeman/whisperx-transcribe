@@ -22,23 +22,15 @@ Given the context information and without using prior knowledge, perform the fol
 
 ### Example Output Structure
 
-Strictly follow the structure below for your final answer. You may add more topics if necessary, but do not change the format.
+Strictly follow the tabular structure below for your final answer. You may add more rows if necessary, but do not change the format.
 
 ```markdown
 ## Action Items
 
-- **Task:** Finalize the Q3 budget report and send it out for review.
-    - **Assigned To:** `Speaker A`.
-    - **Assigned By:** `Speaker B`.
-    - **Deadline:** By Friday, August 15, 2025.
-
-- **Task:** Draft the initial proposal for the "Apollo" project.
-    - **Assigned To:** `Speaker C`.
-    - **Assigned By:** `Speaker B`.
-    - **Deadline:** Before the next sync-up on Monday.
-
-- **Task:** Set up a follow-up meeting with the marketing department.
-    - **Assigned To:** `Speaker A`.
-    - **Assigned By:** `Speaker A` (self-assigned).
-    - **Deadline:** Not specified.
+| #   | Action item | Responsible party | Due Date |
+| --- | ----------- | ----------------- | -------- |
+|     |             |                   |          |
+|     |             |                   |          |
+|     |             |                   |          |
+|     |             |                   |          |
 ```

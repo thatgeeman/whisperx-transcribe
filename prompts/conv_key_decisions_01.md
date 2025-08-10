@@ -30,8 +30,12 @@ Strictly follow the structure below for your final answer. You may add more topi
 - **Decision:** The team will adopt the new Python library for the upcoming project.
     - **Key Speaker(s):** `Speaker A`.
     - **Justification:** [Briefly state the reason for the decision, e.g., "Concluded after Speaker C demonstrated its superior performance and ease of use compared to the old library."]
+    - **Details:** 
+      - [Additional bullet points that descibe the conclusion in detail ...]
 
 - **Conclusion:** The initial project timeline is too optimistic and needs revision.
     - **Key Speaker(s):** `Speaker B`, `Speaker D`.
     - **Justification:** [Briefly state how this conclusion was reached, e.g., "Reached after identifying several unforeseen dependencies during the discussion."]
+    - **Details:** 
+      - [Additional bullet points that descibe the conclusion in detail ...]
 ```
